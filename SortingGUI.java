@@ -63,7 +63,7 @@ public class SortingGUI extends JFrame {
         fileLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         fileLabel.setForeground(Color.GRAY);
 
-        fileBtn.addActionListener(e -> selectFile());
+        fileBtn.addActionListener(e -> selectFile());//error
 
         fileSelectionPanel.add(fileBtn, BorderLayout.WEST);
         fileSelectionPanel.add(fileLabel, BorderLayout.CENTER);
@@ -113,13 +113,42 @@ public class SortingGUI extends JFrame {
         runButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         runButton.setToolTipText("Click to start sorting performance validation");
 
-        runButton.addActionListener(e -> runAnalysis());
+        runButton.addActionListener(e -> runAnalysis());//error
 
         controlsInner.add(runButton);
         controlsPanel.add(controlsInner, BorderLayout.CENTER);
         topContainer.add(controlsPanel);
 
         contentPane.add(topContainer, BorderLayout.NORTH);
+
+
+         // --- Results Panel ---
+        resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
+        resultsPanel.setBackground(Color.WHITE);
+
+        JScrollPane scrollPane = new JScrollPane(resultsPanel);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+        scrollPane.setBackground(Color.WHITE);
+
+        JPanel resultsContainer = new JPanel(new BorderLayout());
+        resultsContainer.setOpaque(false);
+        JLabel sectionTitle3 = new JLabel("3. Performance Results");
+        sectionTitle3.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sectionTitle3.setForeground(new Color(50, 50, 50));
+        sectionTitle3.setBorder(new EmptyBorder(0, 0, 10, 0));
+        resultsContainer.add(sectionTitle3, BorderLayout.NORTH);
+        resultsContainer.add(scrollPane, BorderLayout.CENTER);
+
+        contentPane.add(resultsContainer, BorderLayout.CENTER);
+
+        // --- Status Bar ---
+        statusLabel = new JLabel("Ready");
+        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        statusLabel.setForeground(new Color(80, 80, 80));
+        statusLabel.setBorder(new EmptyBorder(5, 0, 0, 0));
+        contentPane.add(statusLabel, BorderLayout.SOUTH);
+    }
 
     
 
