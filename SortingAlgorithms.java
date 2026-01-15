@@ -54,7 +54,7 @@ public class SortingAlgorithms {
             result[k++] = right[j++];
         }
     }
-}
+
     
     /**
      * Heap Sort
