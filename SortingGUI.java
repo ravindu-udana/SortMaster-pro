@@ -73,6 +73,54 @@ public class SortingGUI extends JFrame {
         topContainer.setOpaque(false);
         topContainer.add(topPanel);
 
+
+        // --- Controls Panel (Column & Run) ---
+        JPanel controlsPanel = new JPanel(new BorderLayout());
+        controlsPanel.setBackground(Color.WHITE);
+        controlsPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220)),
+                new EmptyBorder(15, 15, 15, 15)));
+
+        JLabel sectionTitle2 = new JLabel("2. Configuration");
+        sectionTitle2.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sectionTitle2.setForeground(new Color(50, 50, 50));
+        controlsPanel.add(sectionTitle2, BorderLayout.NORTH);
+
+        JPanel controlsInner = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        controlsInner.setOpaque(false);
+
+        JLabel colLabel = new JLabel("Target Column:");
+        colLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        controlsInner.add(colLabel);
+
+        columnSelect = new JComboBox<>();
+        columnSelect.setPreferredSize(new Dimension(220, 30));
+        columnSelect.setBackground(Color.WHITE);
+        columnSelect.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        columnSelect.setEnabled(false);
+        controlsInner.add(columnSelect);
+
+        runButton = new JButton("Run Analysis");
+        runButton.setEnabled(false);
+        runButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        runButton.setBackground(Color.BLACK);
+        runButton.setForeground(Color.WHITE);
+        runButton.setOpaque(true);
+        runButton.setContentAreaFilled(true);
+        runButton.setBorderPainted(false);
+        runButton.setFocusPainted(false);
+        runButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        runButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        runButton.setToolTipText("Click to start sorting performance validation");
+
+        runButton.addActionListener(e -> runAnalysis());
+
+        controlsInner.add(runButton);
+        controlsPanel.add(controlsInner, BorderLayout.CENTER);
+        topContainer.add(controlsPanel);
+
+        contentPane.add(topContainer, BorderLayout.NORTH);
+
     
 
 }
