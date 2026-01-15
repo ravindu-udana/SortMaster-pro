@@ -19,4 +19,39 @@ public class SortingAlgorithms {
             arr[j + 1] = key;
         }
     }
+
+     /**
+     * Merge Sort
+     * Time Complexity: O(n log n)
+     * Note: This implementation is recursive and works on the array.
+     */
+    public static void mergeSort(double[] arr) {
+        if (arr.length <= 1) return;
+        
+        int mid = arr.length / 2;
+        double[] left = Arrays.copyOfRange(arr, 0, mid);
+        double[] right = Arrays.copyOfRange(arr, mid, arr.length);
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(arr, left, right);
+    }
+
+    private static void merge(double[] result, double[] left, double[] right) {
+        int i = 0, j = 0, k = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                result[k++] = left[i++];
+            } else {
+                result[k++] = right[j++];
+            }
+        }
+        while (i < left.length) {
+            result[k++] = left[i++];
+        }
+        while (j < right.length) {
+            result[k++] = right[j++];
+        }
+    }
 }
