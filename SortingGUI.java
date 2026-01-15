@@ -62,4 +62,67 @@ public class SortingGUI extends JFrame {
             statusLabel.setText("Error loading file.");
         }
     }
+
+    private void runAnalysis() {
+        String selectedCol = (String) columnSelect.getSelectedItem();
+        if (selectedCol == null)
+            return;
+
+        statusLabel.setText("Reading data...");
+        resultsPanel.removeAll();
+        resultsPanel.revalidate();
+        resultsPanel.repaint();
+
+        new SwingWorker<List<Result>, Void>() {
+            @Override
+            protected List<Result> doInBackground() throws Exception {
+                double[] originalData = CSVParser.getColumnData(currentFile, selectedCol);
+
+                if (originalData.length < 2) {
+                    throw new Exception("Not enough numeric data in this column.");
+                }
+
+                List<Result> results = new java.util.ArrayList<>();
+                results.add(benchmark("Insertion Sort", originalData, SortingAlgorithms::insertionSort));
+                results.add(benchmark("Shell Sort", originalData, SortingAlgorithms::shellSort));
+                results.add(benchmark("Merge Sort", originalData, SortingAlgorithms::mergeSort));
+                results.add(benchmark("Quick Sort", originalData, SortingAlgorithms::quickSort));
+                results.add(benchmark("Heap Sort", originalData, SortingAlgorithms::heapSort));
+
+                results.sort((a, b) -> Double.compare(a.timeMs, b.timeMs));
+                return results;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    List<Result> results = get();
+                    displayResults(results);
+                    statusLabel.setText("Analysis Complete.");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(SortingGUI.this, e.getMessage(), "Analysis Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    statusLabel.setText("Error during analysis.");
+                }
+            }
+        }.execute();
+    }
+
+    private static class Result {
+        String name;
+        double timeMs;
+
+        public Result(String name, double timeMs) {
+            this.name = name;
+            this.timeMs = timeMs;
+        }
+    }
+
+    private Result benchmark(String name, double[] original, java.util.function.Consumer<double[]> algo) {
+        double[] arr = Arrays.copyOf(original, original.length);
+        long start = System.nanoTime();
+        algo.accept(arr);
+        long end = System.nanoTime();
+        return new Result(name, (end - start) / 1_000_000.0);
+    }
 }
