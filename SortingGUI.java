@@ -64,7 +64,7 @@ public class SortingGUI extends JFrame {
         fileLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         fileLabel.setForeground(Color.GRAY);
 
-        //fileBtn.addActionListener(e -> selectFile());//error
+        fileBtn.addActionListener(e -> selectFile());
 
         fileSelectionPanel.add(fileBtn, BorderLayout.WEST);
         fileSelectionPanel.add(fileLabel, BorderLayout.CENTER);
@@ -114,7 +114,7 @@ public class SortingGUI extends JFrame {
         runButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         runButton.setToolTipText("Click to start sorting performance validation");
 
-        //runButton.addActionListener(e -> runAnalysis());//error
+        runButton.addActionListener(e -> runAnalysis());
 
         controlsInner.add(runButton);
         controlsPanel.add(controlsInner, BorderLayout.CENTER);
