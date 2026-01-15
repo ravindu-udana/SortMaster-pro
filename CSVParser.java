@@ -103,5 +103,26 @@ public class CSVParser {
         }
         return numericHeaders;
     }
+
+    // Simple CSV Line splitter handling quotes
+    private static List<String> parseLine(String line) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (char c : line.toCharArray()) {
+            if (c == '\"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                result.add(current.toString());
+                current.setLength(0);
+            } else {
+                current.append(c);
+            }
+        }
+        result.add(current.toString());
+        return result;
+    }
+
 }
 
