@@ -63,7 +63,7 @@ public class SortingGUI extends JFrame {
         fileLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         fileLabel.setForeground(Color.GRAY);
 
-        fileBtn.addActionListener(e -> selectFile());
+        //fileBtn.addActionListener(e -> selectFile());//error
 
         fileSelectionPanel.add(fileBtn, BorderLayout.WEST);
         fileSelectionPanel.add(fileLabel, BorderLayout.CENTER);
@@ -72,6 +72,123 @@ public class SortingGUI extends JFrame {
         JPanel topContainer = new JPanel(new GridLayout(2, 1, 0, 15)); // Gap between panels
         topContainer.setOpaque(false);
         topContainer.add(topPanel);
+
+
+        // --- Controls Panel (Column & Run) ---
+        JPanel controlsPanel = new JPanel(new BorderLayout());
+        controlsPanel.setBackground(Color.WHITE);
+        controlsPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220)),
+                new EmptyBorder(15, 15, 15, 15)));
+
+        JLabel sectionTitle2 = new JLabel("2. Configuration");
+        sectionTitle2.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sectionTitle2.setForeground(new Color(50, 50, 50));
+        controlsPanel.add(sectionTitle2, BorderLayout.NORTH);
+
+        JPanel controlsInner = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        controlsInner.setOpaque(false);
+
+        JLabel colLabel = new JLabel("Target Column:");
+        colLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        controlsInner.add(colLabel);
+
+        columnSelect = new JComboBox<>();
+        columnSelect.setPreferredSize(new Dimension(220, 30));
+        columnSelect.setBackground(Color.WHITE);
+        columnSelect.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        columnSelect.setEnabled(false);
+        controlsInner.add(columnSelect);
+
+        runButton = new JButton("Run Analysis");
+        runButton.setEnabled(false);
+        runButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        runButton.setBackground(Color.BLACK);
+        runButton.setForeground(Color.WHITE);
+        runButton.setOpaque(true);
+        runButton.setContentAreaFilled(true);
+        runButton.setBorderPainted(false);
+        runButton.setFocusPainted(false);
+        runButton.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        runButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        runButton.setToolTipText("Click to start sorting performance validation");
+
+        //runButton.addActionListener(e -> runAnalysis());//error
+
+        controlsInner.add(runButton);
+        controlsPanel.add(controlsInner, BorderLayout.CENTER);
+        topContainer.add(controlsPanel);
+
+        contentPane.add(topContainer, BorderLayout.NORTH);
+
+
+         // --- Results Panel ---
+        resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
+        resultsPanel.setBackground(Color.WHITE);
+
+        JScrollPane scrollPane = new JScrollPane(resultsPanel);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+        scrollPane.setBackground(Color.WHITE);
+
+        JPanel resultsContainer = new JPanel(new BorderLayout());
+        resultsContainer.setOpaque(false);
+        JLabel sectionTitle3 = new JLabel("3. Performance Results");
+        sectionTitle3.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sectionTitle3.setForeground(new Color(50, 50, 50));
+        sectionTitle3.setBorder(new EmptyBorder(0, 0, 10, 0));
+        resultsContainer.add(sectionTitle3, BorderLayout.NORTH);
+        resultsContainer.add(scrollPane, BorderLayout.CENTER);
+
+        contentPane.add(resultsContainer, BorderLayout.CENTER);
+
+        // --- Status Bar ---
+        statusLabel = new JLabel("Ready");
+        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        statusLabel.setForeground(new Color(80, 80, 80));
+        statusLabel.setBorder(new EmptyBorder(5, 0, 0, 0));
+        contentPane.add(statusLabel, BorderLayout.SOUTH);
+    }
+
+    private void displayResults(List<Result> results) {
+        resultsPanel.removeAll();
+        if (results.isEmpty())
+            return;
+
+        Result best = results.get(0);
+        for (Result res : results) {
+            JPanel card = new JPanel(new BorderLayout());
+            card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+            card.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+                    new EmptyBorder(10, 10, 10, 10)));
+            card.setBackground(Color.WHITE);
+
+            JLabel nameLabel = new JLabel(res.name);
+            nameLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
+            JLabel timeLabel = new JLabel(String.format("%.4f ms", res.timeMs));
+            timeLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
+
+            if (res == best) {
+                card.setBackground(new Color(230, 255, 230));
+                nameLabel.setForeground(new Color(0, 100, 0));
+                nameLabel.setText(res.name + " (Best)");
+                timeLabel.setForeground(new Color(0, 100, 0));
+            }
+
+            card.add(nameLabel, BorderLayout.WEST);
+            card.add(timeLabel, BorderLayout.EAST);
+            resultsPanel.add(card);
+        }
+        resultsPanel.revalidate();
+        resultsPanel.repaint();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new SortingGUI().setVisible(true));
+    }
+
 
     
 
